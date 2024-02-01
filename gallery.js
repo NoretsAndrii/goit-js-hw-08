@@ -65,6 +65,8 @@ const images = [
 ];
 const gallery = document.querySelector('.gallery');
 
+//---------- Створення і додавання елементів галереі ------------------
+
 const galleryItems = images
   .map(image => {
     const { preview, original, description } = image;
@@ -82,6 +84,8 @@ const galleryItems = images
   })
   .join('');
 
+//------------ Відстеження кліку по елементу галереі --------------------
+
 gallery.insertAdjacentHTML('beforeend', galleryItems);
 
 gallery.addEventListener('click', event => {
@@ -89,5 +93,16 @@ gallery.addEventListener('click', event => {
   if (event.target.nodeName !== 'IMG') {
     return;
   }
-  console.log(event.target.dataset.source);
+  // Модальне вікно створенно за допомогою бібліотеки basicLightbox
+  const instance = basicLightbox.create(`
+    <img src="${event.target.dataset.source}">
+`);
+  instance.show(() => {
+    document.addEventListener('keydown', event => {
+      console.log('Keydown: ', event);
+      if (event.code === 'Escape') {
+        instance.close();
+      }
+    });
+  });
 });

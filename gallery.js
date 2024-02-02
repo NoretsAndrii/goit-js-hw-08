@@ -70,7 +70,6 @@ const gallery = document.querySelector('.gallery');
 const galleryItems = images
   .map(image => {
     const { preview, original, description } = image;
-    console.log(description);
     return `<li class="gallery-item"><a class="gallery-link" href=${original.slice(
       1,
       original.length - 1
@@ -97,12 +96,12 @@ gallery.addEventListener('click', event => {
   const instance = basicLightbox.create(`
     <img src="${event.target.dataset.source}">
 `);
-  instance.show(() => {
-    document.addEventListener('keydown', event => {
-      console.log('Keydown: ', event);
-      if (event.code === 'Escape') {
-        instance.close();
-      }
-    });
+  instance.show();
+  gallery.addEventListener('keydown', event => {
+    console.log('Keydown: ', event);
+    if (event.code !== 'Escape') {
+      return;
+    }
+    instance.close();
   });
 });

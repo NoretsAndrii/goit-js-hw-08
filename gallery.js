@@ -83,25 +83,32 @@ const galleryItems = images
   })
   .join('');
 
-//------------ Відстеження кліку по елементу галереі --------------------
-
 gallery.insertAdjacentHTML('beforeend', galleryItems);
+
+//------------ Відстеження кліку по елементу галереі --------------------
 
 gallery.addEventListener('click', event => {
   event.preventDefault();
   if (event.target.nodeName !== 'IMG') {
     return;
   }
+
   // Модальне вікно створенно за допомогою бібліотеки basicLightbox
   const instance = basicLightbox.create(`
     <img src="${event.target.dataset.source}">
 `);
   instance.show();
-  gallery.addEventListener('keydown', event => {
+
+  // Функція закриття модального вікна
+  const closeModal = event => {
     console.log('Keydown: ', event);
     if (event.code !== 'Escape') {
       return;
     }
     instance.close();
-  });
+    document.removeEventListener('keydown', closeModal);
+  };
+
+  // Відстеження подіі клавіатури для закриття модального вікна
+  document.addEventListener('keydown', closeModal);
 });
